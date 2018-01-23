@@ -3,6 +3,9 @@
 An example of using [rxjava-jdbc](https://github.com/davidmoten/rxjava-jdbc) to interact with SQL databases.
 
 ## Running the Example
+The example can be run using the following command:
+
+    $ ./gradlew run
 
 ## Bugs and Feedback
 For bugs, questions and discussions please use the [Github Issues](https://github.com/gregwhitaker/rxjava-jdbc-example/issues).
