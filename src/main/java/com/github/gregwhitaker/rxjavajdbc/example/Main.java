@@ -17,40 +17,26 @@ public class Main {
     public static void main(String... args) throws Exception {
         Database db = Database.from("jdbc:h2:./build/mydatabase", "sa", "sa");
 
-        System.out.println();
-
         // Query that returns no employees
         getNoEmployees(db);
-
-        System.out.println();
 
         // Query that returns all employees
         getAllEmployees(db);
 
-        System.out.println();
-
         // Query that returns all manufacturing employees
         getAllManufacturingEmployees(db);
 
-        System.out.println();
-
         // Query that returns Bob Smith
         getBobSmith(db);
-
-        System.out.println();
 
         // Query that returns Bob Smith and uses automapping for the
         // returned Employee object
         getBobSmithWithMapping(db);
 
-        System.out.println();
-
         // Query that returns all departments and uses automapping on an interface
         // for the returned Department object
         getAllDepartmentsWithInterfaceMapping(db);
-
-        System.out.println();
-
+        
         // Query that returns all departments and uses automapping with an annotated
         // query on the returned Department object
         getAllDepartmentsUsingAnnotatedQuery(db);
