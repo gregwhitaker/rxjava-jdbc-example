@@ -36,13 +36,14 @@ public class Main {
         // Query that returns all departments and uses automapping on an interface
         // for the returned Department object
         getAllDepartmentsWithInterfaceMapping(db);
-        
+
         // Query that returns all departments and uses automapping with an annotated
         // query on the returned Department object
         getAllDepartmentsUsingAnnotatedQuery(db);
     }
 
     private static void getNoEmployees(Database db) {
+        System.out.println();
         LOGGER.info("STARTING: getNoEmployees");
 
         String sql = "SELECT * FROM employee e JOIN department d ON e.department_id = d.department_id WHERE employee_firstname LIKE 'Barbara'";
@@ -66,6 +67,7 @@ public class Main {
     }
 
     private static void getAllEmployees(Database db) {
+        System.out.println();
         LOGGER.info("STARTING: getAllEmployees");
 
         String sql = "SELECT * FROM employee e JOIN department d ON e.department_id = d.department_id";
@@ -89,6 +91,7 @@ public class Main {
     }
 
     private static void getAllManufacturingEmployees(Database db) {
+        System.out.println();
         LOGGER.info("STARTING: getAllManufacturingEmployees");
 
         String sql = "SELECT EMPLOYEE_ID, EMPLOYEE_FIRSTNAME, EMPLOYEE_LASTNAME, DEPARTMENT_NAME FROM EMPLOYEE e " +
@@ -114,6 +117,7 @@ public class Main {
     }
 
     private static void getBobSmith(Database db) {
+        System.out.println();
         LOGGER.info("STARTING: getBobSmith");
 
         String sql = "SELECT EMPLOYEE_ID, EMPLOYEE_FIRSTNAME, EMPLOYEE_LASTNAME, DEPARTMENT_NAME FROM EMPLOYEE e " +
@@ -140,6 +144,7 @@ public class Main {
     }
 
     private static void getBobSmithWithMapping(Database db) {
+        System.out.println();
         LOGGER.info("STARTING: getBobSmithWithMapping");
 
         String sql = "SELECT EMPLOYEE_ID, EMPLOYEE_FIRSTNAME, EMPLOYEE_LASTNAME, DEPARTMENT_NAME FROM EMPLOYEE e " +
@@ -158,6 +163,7 @@ public class Main {
     }
 
     private static void getAllDepartmentsWithInterfaceMapping(Database db) {
+        System.out.println();
         LOGGER.info("STARTING: getAllDepartmentsWithInterfaceMapping");
 
         String sql = "SELECT * FROM department";
@@ -173,6 +179,7 @@ public class Main {
     }
 
     private static void getAllDepartmentsUsingAnnotatedQuery(Database db) {
+        System.out.println();
         LOGGER.info("STARTING: getAllDepartmentsWithInterfaceMapping");
 
         List<Department> departments = db.select()
