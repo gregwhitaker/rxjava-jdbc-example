@@ -1,14 +1,16 @@
 CREATE TABLE department
 (
-  department_id   BIGINT NOT NULL PRIMARY KEY,
-  department_name VARCHAR(100) NOT NULL
+  department_id   INT           NOT NULL PRIMARY KEY,
+  department_name VARCHAR(100)  NOT NULL
 );
 
 CREATE TABLE employee (
-  employee_id         BIGINT          NOT NULL PRIMARY KEY,
-  employee_firstname  VARCHAR (100)   NOT NULL,
-  employee_lastname   VARCHAR (100)   NOT NULL,
-  department_id       BIGINT          NOT NULL
+  employee_id         INT           NOT NULL PRIMARY KEY,
+  employee_firstname  VARCHAR (100) NOT NULL,
+  employee_lastname   VARCHAR (100) NOT NULL,
+  department_id       INT           NOT NULL,
+
+  FOREIGN KEY (department_id) REFERENCES department (department_id)
 );
 
 INSERT INTO department (department_id, department_name) VALUES (1, 'Sales');
