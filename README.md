@@ -1,4 +1,5 @@
 # rxjava-jdbc-example
+[![Build Status](https://travis-ci.org/gregwhitaker/rxjava-jdbc-example.svg?branch=master)](https://travis-ci.org/gregwhitaker/rxjava-jdbc-example)
 
 An example of using [rxjava-jdbc](https://github.com/davidmoten/rxjava-jdbc) to interact with SQL databases.
 
