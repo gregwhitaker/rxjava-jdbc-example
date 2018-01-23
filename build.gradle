@@ -1,0 +1,34 @@
+plugins {
+    id 'java'
+    id 'application'
+    id 'com.gradle.build-scan' version '1.11'
+    id 'org.flywaydb.flyway' version '4.2.0'
+}
+
+buildScan {
+    licenseAgreementUrl = 'https://gradle.com/terms-of-service'
+    licenseAgree = 'yes'
+    publishAlways()
+}
+
+group 'com.github.gregwhitaker'
+version '0.1.0'
+sourceCompatibility = 1.8
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    runtime 'org.slf4j:slf4j-simple:1.7.22'
+}
+
+mainClassName = 'com.github.gregwhitaker.rxjavajdbc.example.Main'
+
+flyway {
+    url = 'jdbc:h2:./build/database'
+    user = 'sa'
+    password = 'sa'
+}
+clean.dependsOn(flywayClean)
+build.dependsOn(flywayMigrate)
