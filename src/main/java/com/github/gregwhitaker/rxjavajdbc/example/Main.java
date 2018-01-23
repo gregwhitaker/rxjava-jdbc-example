@@ -17,11 +17,41 @@ public class Main {
 
         System.out.println();
 
+        // Query that returns no employees
+        getNoEmployees(db);
+
+        System.out.println();
+
+        // Query that returns all employees
         getAllEmployees(db);
 
         System.out.println();
 
+        // Query that returns all manufacturing employees
         getAllManufacturingEmployees(db);
+    }
+
+    private static void getNoEmployees(Database db) {
+        LOGGER.info("STARTING: getNoEmployees");
+
+        String sql = "SELECT * FROM employee e JOIN department d ON e.department_id = d.department_id WHERE employee_firstname LIKE 'Barbara'";
+
+        List<Employee> employees = db.select(sql)
+                .get(rs -> {
+                    Employee employee = new Employee();
+                    employee.setId(rs.getInt("employee_id"));
+                    employee.setFirstName(rs.getString("employee_firstname"));
+                    employee.setLastName(rs.getString("employee_lastname"));
+                    employee.setDepartment(rs.getString("department_name"));
+
+                    return employee;
+                })
+                .doOnNext(System.out::println)
+                .toList()
+                .toBlocking()
+                .last();
+
+        LOGGER.info("FINISHED: getNoEmployees");
     }
 
     private static void getAllEmployees(Database db) {
