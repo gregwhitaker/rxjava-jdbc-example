@@ -28,7 +28,7 @@ dependencies {
 mainClassName = 'com.github.gregwhitaker.rxjavajdbc.example.Main'
 
 flyway {
-    url = 'jdbc:h2:./build/database'
+    url = 'jdbc:h2:./build/mydatabase'
     user = 'sa'
     password = 'sa'
 }
