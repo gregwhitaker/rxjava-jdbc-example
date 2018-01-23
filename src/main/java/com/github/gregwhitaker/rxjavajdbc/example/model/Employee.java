@@ -1,4 +1,4 @@
-package com.github.gregwhitaker.rxjavajdbc.example;
+package com.github.gregwhitaker.rxjavajdbc.example.model;
 
 public class Employee {
 

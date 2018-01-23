@@ -1,6 +1,7 @@
 package com.github.gregwhitaker.rxjavajdbc.example;
 
 import com.github.davidmoten.rx.jdbc.Database;
+import com.github.gregwhitaker.rxjavajdbc.example.model.Employee;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
