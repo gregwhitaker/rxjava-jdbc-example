@@ -129,7 +129,7 @@ public class Main {
                 .toList()
                 .toBlocking()
                 .last();
-        
+
         LOGGER.info("FINISHED: getBobSmith");
     }
 }
