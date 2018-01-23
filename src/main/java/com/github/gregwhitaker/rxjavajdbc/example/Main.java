@@ -33,10 +33,12 @@ public class Main {
 
         System.out.println();
 
+        // Query that returns Bob Smith
         getBobSmith(db);
 
         System.out.println();
 
+        // Query that returns Bob Smith and uses automapping for the returned Employee object
         getBobSmithWithMapping(db);
     }
 
