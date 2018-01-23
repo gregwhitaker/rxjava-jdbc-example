@@ -48,6 +48,12 @@ public class Main {
         // Query that returns all departments and uses automapping on an interface
         // for the returned Department object
         getAllDepartmentsWithInterfaceMapping(db);
+
+        System.out.println();
+
+        // Query that returns all departments and uses automapping with an annotated
+        // query on the returned Department object
+        getAllDepartmentsUsingAnnotatedQuery(db);
     }
 
     private static void getNoEmployees(Database db) {
@@ -178,5 +184,18 @@ public class Main {
                 .last();
 
         LOGGER.info("FINISHED: getAllDepartmentsWithInterfaceMapping");
+    }
+
+    private static void getAllDepartmentsUsingAnnotatedQuery(Database db) {
+        LOGGER.info("STARTING: getAllDepartmentsWithInterfaceMapping");
+
+        List<Department> departments = db.select()
+                .autoMap(Department.class)
+                .doOnNext(department -> System.out.println("Department: " + department.id() + " - " + department.name()))
+                .toList()
+                .toBlocking()
+                .last();
+
+        LOGGER.info("FINISHED: getAllDepartmentsUsingAnnotatedQuery");
     }
 }
