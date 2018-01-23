@@ -30,6 +30,10 @@ public class Main {
 
         // Query that returns all manufacturing employees
         getAllManufacturingEmployees(db);
+
+        System.out.println();
+
+        getBobSmith(db);
     }
 
     private static void getNoEmployees(Database db) {
@@ -101,5 +105,31 @@ public class Main {
                 .last();
 
         LOGGER.info("FINISHED: getAllManufacturingEmployees");
+    }
+
+    private static void getBobSmith(Database db) {
+        LOGGER.info("STARTING: getBobSmith");
+
+        String sql = "SELECT EMPLOYEE_ID, EMPLOYEE_FIRSTNAME, EMPLOYEE_LASTNAME, DEPARTMENT_NAME FROM EMPLOYEE e " +
+                "JOIN DEPARTMENT d ON e.DEPARTMENT_ID = d.DEPARTMENT_ID " +
+                "WHERE EMPLOYEE_FIRSTNAME = 'Bob' AND " +
+                "EMPLOYEE_LASTNAME = 'Smith'";
+
+        List<Employee> employees = db.select(sql)
+                .get(rs -> {
+                    Employee employee = new Employee();
+                    employee.setId(rs.getInt("employee_id"));
+                    employee.setFirstName(rs.getString("employee_firstname"));
+                    employee.setLastName(rs.getString("employee_lastname"));
+                    employee.setDepartment(rs.getString("department_name"));
+
+                    return employee;
+                })
+                .doOnNext(System.out::println)
+                .toList()
+                .toBlocking()
+                .last();
+        
+        LOGGER.info("FINISHED: getBobSmith");
     }
 }
