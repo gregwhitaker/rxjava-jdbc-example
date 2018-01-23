@@ -1,6 +1,7 @@
 package com.github.gregwhitaker.rxjavajdbc.example;
 
 import com.github.davidmoten.rx.jdbc.Database;
+import com.github.gregwhitaker.rxjavajdbc.example.model.Department;
 import com.github.gregwhitaker.rxjavajdbc.example.model.Employee;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,8 +39,15 @@ public class Main {
 
         System.out.println();
 
-        // Query that returns Bob Smith and uses automapping for the returned Employee object
+        // Query that returns Bob Smith and uses automapping for the
+        // returned Employee object
         getBobSmithWithMapping(db);
+
+        System.out.println();
+
+        // Query that returns all departments and uses automapping on an interface
+        // for the returned Department object
+        getAllDepartmentsWithInterfaceMapping(db);
     }
 
     private static void getNoEmployees(Database db) {
@@ -155,5 +163,20 @@ public class Main {
                 .last();
 
         LOGGER.info("FINISHED: getBobSmithWithMapping");
+    }
+
+    private static void getAllDepartmentsWithInterfaceMapping(Database db) {
+        LOGGER.info("STARTING: getAllDepartmentsWithInterfaceMapping");
+
+        String sql = "SELECT * FROM department";
+
+        List<Department> departments = db.select(sql)
+                .autoMap(Department.class)
+                .doOnNext(department -> System.out.println("Department: " + department.id() + " - " + department.name()))
+                .toList()
+                .toBlocking()
+                .last();
+
+        LOGGER.info("FINISHED: getAllDepartmentsWithInterfaceMapping");
     }
 }
