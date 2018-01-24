@@ -69,6 +69,14 @@ public class Main {
         System.out.println("Example: createNewEmployee");
         createNewEmployee(db)
                 .subscribe(System.out::println);
+
+        // Deletes an employee from the database and returns the number of rows deleted
+        System.out.println();
+        System.out.println("Example: deleteEmployee");
+        deleteEmployee(db)
+                .subscribe(count -> {
+                    System.out.println(String.format("Deleted %s employees", count));
+                });
     }
 
     private static Observable<Employee> getNoEmployees(Database db) {
@@ -179,5 +187,14 @@ public class Main {
                         .parameterTransformer()
                         .autoMap(Employee.class)
                 );
+    }
+
+    private static Observable<Integer> deleteEmployee(Database db) {
+        String sql = "DELETE FROM employee WHERE employee_firstname = ? AND employee_lastname = ?";
+
+        return db.update(sql)
+                .parameter("Jerry")
+                .parameter("Cook")
+                .count();
     }
 }
