@@ -5,8 +5,7 @@ import com.github.gregwhitaker.rxjavajdbc.example.model.Department;
 import com.github.gregwhitaker.rxjavajdbc.example.model.Employee;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.List;
+import rx.Observable;
 
 /**
  * Starts the rxjava-jdbc-example application.
@@ -18,37 +17,52 @@ public class Main {
         Database db = Database.from("jdbc:h2:./build/mydatabase", "sa", "sa");
 
         // Query that returns no employees
-        getNoEmployees(db);
+        System.out.println();
+        LOGGER.info("Example: getNoEmployees");
+        getNoEmployees(db).subscribe(System.out::println);
 
         // Query that returns all employees
-        getAllEmployees(db);
+        System.out.println();
+        LOGGER.info("Example: getAllEmployees");
+        getAllEmployees(db).subscribe(System.out::println);
 
         // Query that returns all manufacturing employees
-        getAllManufacturingEmployees(db);
+        System.out.println();
+        LOGGER.info("Example: getAllManufacturingEmployees");
+        getAllManufacturingEmployees(db).subscribe(System.out::println);
 
         // Query that returns Bob Smith
-        getBobSmith(db);
+        System.out.println();
+        LOGGER.info("Example: getBobSmith");
+        getBobSmith(db).subscribe(System.out::println);
 
         // Query that returns Bob Smith and uses automapping for the
         // returned Employee object
-        getBobSmithWithMapping(db);
+        System.out.println();
+        LOGGER.info("Example: getBobSmithWithMapping");
+        getBobSmithWithMapping(db).subscribe(System.out::println);
 
         // Query that returns all departments and uses automapping on an interface
         // for the returned Department object
-        getAllDepartmentsWithInterfaceMapping(db);
+        System.out.println();
+        LOGGER.info("Example: getAllDepartmentsWithInterfaceMapping");
+        getAllDepartmentsWithInterfaceMapping(db).subscribe(department -> {
+            System.out.println(String.format("Department: %s - %s", department.id(), department.name()));
+        });
 
         // Query that returns all departments and uses automapping with an annotated
         // query on the returned Department object
-        getAllDepartmentsUsingAnnotatedQuery(db);
+        System.out.println();
+        LOGGER.info("Example: getAllDepartmentsUsingAnnotatedQuery");
+        getAllDepartmentsUsingAnnotatedQuery(db).subscribe(department -> {
+            System.out.println(String.format("Department: %s - %s", department.id(), department.name()));
+        });
     }
 
-    private static void getNoEmployees(Database db) {
-        System.out.println();
-        LOGGER.info("STARTING: getNoEmployees");
-
+    private static Observable<Employee> getNoEmployees(Database db) {
         String sql = "SELECT * FROM employee e JOIN department d ON e.department_id = d.department_id WHERE employee_firstname LIKE 'Barbara'";
 
-        List<Employee> employees = db.select(sql)
+        return db.select(sql)
                 .get(rs -> {
                     Employee employee = new Employee();
                     employee.setId(rs.getInt("employee_id"));
@@ -57,22 +71,13 @@ public class Main {
                     employee.setDepartment(rs.getString("department_name"));
 
                     return employee;
-                })
-                .doOnNext(System.out::println)
-                .toList()
-                .toBlocking()
-                .last();
-
-        LOGGER.info("FINISHED: getNoEmployees");
+                });
     }
 
-    private static void getAllEmployees(Database db) {
-        System.out.println();
-        LOGGER.info("STARTING: getAllEmployees");
-
+    private static Observable<Employee> getAllEmployees(Database db) {
         String sql = "SELECT * FROM employee e JOIN department d ON e.department_id = d.department_id";
 
-        List<Employee> employees = db.select(sql)
+        return db.select(sql)
                 .get(rs -> {
                     Employee employee = new Employee();
                     employee.setId(rs.getInt("employee_id"));
@@ -81,24 +86,15 @@ public class Main {
                     employee.setDepartment(rs.getString("department_name"));
 
                     return employee;
-                })
-                .doOnNext(System.out::println)
-                .toList()
-                .toBlocking()
-                .last();
-
-        LOGGER.info("FINISHED: getAllEmployees");
+                });
     }
 
-    private static void getAllManufacturingEmployees(Database db) {
-        System.out.println();
-        LOGGER.info("STARTING: getAllManufacturingEmployees");
-
+    private static Observable<Employee> getAllManufacturingEmployees(Database db) {
         String sql = "SELECT EMPLOYEE_ID, EMPLOYEE_FIRSTNAME, EMPLOYEE_LASTNAME, DEPARTMENT_NAME FROM EMPLOYEE e " +
             "JOIN DEPARTMENT d ON e.DEPARTMENT_ID = d.DEPARTMENT_ID " +
             "WHERE DEPARTMENT_NAME = 'Manufacturing'";
 
-        List<Employee> employees = db.select(sql)
+        return db.select(sql)
                 .get(rs -> {
                     Employee employee = new Employee();
                     employee.setId(rs.getInt("employee_id"));
@@ -107,25 +103,16 @@ public class Main {
                     employee.setDepartment(rs.getString("department_name"));
 
                     return employee;
-                })
-                .doOnNext(System.out::println)
-                .toList()
-                .toBlocking()
-                .last();
-
-        LOGGER.info("FINISHED: getAllManufacturingEmployees");
+                });
     }
 
-    private static void getBobSmith(Database db) {
-        System.out.println();
-        LOGGER.info("STARTING: getBobSmith");
-
+    private static Observable<Employee> getBobSmith(Database db) {
         String sql = "SELECT EMPLOYEE_ID, EMPLOYEE_FIRSTNAME, EMPLOYEE_LASTNAME, DEPARTMENT_NAME FROM EMPLOYEE e " +
                 "JOIN DEPARTMENT d ON e.DEPARTMENT_ID = d.DEPARTMENT_ID " +
                 "WHERE EMPLOYEE_FIRSTNAME = 'Bob' AND " +
                 "EMPLOYEE_LASTNAME = 'Smith'";
 
-        List<Employee> employees = db.select(sql)
+        return db.select(sql)
                 .get(rs -> {
                     Employee employee = new Employee();
                     employee.setId(rs.getInt("employee_id"));
@@ -134,61 +121,28 @@ public class Main {
                     employee.setDepartment(rs.getString("department_name"));
 
                     return employee;
-                })
-                .doOnNext(System.out::println)
-                .toList()
-                .toBlocking()
-                .last();
-
-        LOGGER.info("FINISHED: getBobSmith");
+                });
     }
 
-    private static void getBobSmithWithMapping(Database db) {
-        System.out.println();
-        LOGGER.info("STARTING: getBobSmithWithMapping");
-
+    private static Observable<Employee> getBobSmithWithMapping(Database db) {
         String sql = "SELECT EMPLOYEE_ID, EMPLOYEE_FIRSTNAME, EMPLOYEE_LASTNAME, DEPARTMENT_NAME FROM EMPLOYEE e " +
                 "JOIN DEPARTMENT d ON e.DEPARTMENT_ID = d.DEPARTMENT_ID " +
                 "WHERE EMPLOYEE_FIRSTNAME = 'Bob' AND " +
                 "EMPLOYEE_LASTNAME = 'Smith'";
 
-        List<Employee> employees = db.select(sql)
-                .autoMap(Employee.class)
-                .doOnNext(System.out::println)
-                .toList()
-                .toBlocking()
-                .last();
-
-        LOGGER.info("FINISHED: getBobSmithWithMapping");
+        return db.select(sql)
+                .autoMap(Employee.class);
     }
 
-    private static void getAllDepartmentsWithInterfaceMapping(Database db) {
-        System.out.println();
-        LOGGER.info("STARTING: getAllDepartmentsWithInterfaceMapping");
-
+    private static Observable<Department> getAllDepartmentsWithInterfaceMapping(Database db) {
         String sql = "SELECT * FROM department";
 
-        List<Department> departments = db.select(sql)
-                .autoMap(Department.class)
-                .doOnNext(department -> System.out.println("Department: " + department.id() + " - " + department.name()))
-                .toList()
-                .toBlocking()
-                .last();
-
-        LOGGER.info("FINISHED: getAllDepartmentsWithInterfaceMapping");
+        return db.select(sql)
+                .autoMap(Department.class);
     }
 
-    private static void getAllDepartmentsUsingAnnotatedQuery(Database db) {
-        System.out.println();
-        LOGGER.info("STARTING: getAllDepartmentsWithInterfaceMapping");
-
-        List<Department> departments = db.select()
-                .autoMap(Department.class)
-                .doOnNext(department -> System.out.println("Department: " + department.id() + " - " + department.name()))
-                .toList()
-                .toBlocking()
-                .last();
-
-        LOGGER.info("FINISHED: getAllDepartmentsUsingAnnotatedQuery");
+    private static Observable<Department> getAllDepartmentsUsingAnnotatedQuery(Database db) {
+        return db.select()
+                .autoMap(Department.class);
     }
 }
