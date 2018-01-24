@@ -33,15 +33,15 @@ public class Main {
 
         // Query that returns Bob Smith
         System.out.println();
-        System.out.println("Example: getBobSmith");
-        getBobSmith(db)
+        System.out.println("Example: getEmployee");
+        getEmployee(db)
                 .subscribe(System.out::println);
 
         // Query that returns Bob Smith and uses automapping for the
         // returned Employee object
         System.out.println();
-        System.out.println("Example: getBobSmithWithMapping");
-        getBobSmithWithMapping(db)
+        System.out.println("Example: getEmployeeUsingAutomapping");
+        getEmployeeUsingAutomapping(db)
                 .subscribe(System.out::println);
 
         // Query that returns all departments and uses automapping on an interface
@@ -76,6 +76,13 @@ public class Main {
                 .subscribe(count -> {
                     System.out.println(String.format("Deleted %s employees", count));
                 });
+
+        // Updates an employee's last name and then returns the employee information
+        // by composing the update and select statements
+        System.out.println();
+        System.out.println("Example: updateEmployee");
+        updateEmployee(db)
+                .subscribe(System.out::println);
     }
 
     /**
@@ -150,7 +157,7 @@ public class Main {
      * @param db database connection
      * @return an observable that emits a single employee, 'Bob Smith'
      */
-    private static Observable<Employee> getBobSmith(Database db) {
+    private static Observable<Employee> getEmployee(Database db) {
         String sql = "SELECT employee_id, employee_firstname, employee_lastname, department_name FROM employee e " +
                 "JOIN department d ON e.department_id = d.department_id " +
                 "WHERE employee_firstname = ? AND " +
@@ -176,7 +183,7 @@ public class Main {
      * @param db database connection
      * @return an observable that emits a single employee, 'Bob Smith'
      */
-    private static Observable<Employee> getBobSmithWithMapping(Database db) {
+    private static Observable<Employee> getEmployeeUsingAutomapping(Database db) {
         String sql = "SELECT employee_id, employee_firstname, employee_lastname, department_name FROM employee e " +
                 "JOIN department d ON e.department_id = d.department_id " +
                 "WHERE employee_firstname = ? AND " +
@@ -250,5 +257,28 @@ public class Main {
                 .parameter("Jerry")
                 .parameter("Cook")
                 .count();
+    }
+
+    /**
+     * Executes an update statement to update employee 2's last name and then return the
+     * employee record from the database.
+     *
+     * @param db database connection
+     * @return an observable that emits the newly updated employee record
+     */
+    private static Observable<Employee> updateEmployee(Database db) {
+        String updateSql = "UPDATE employee SET employee_lastname = ? WHERE employee_id = ? ";
+        String selectSql = "SELECT employee_id, employee_firstname, employee_lastname, department_name FROM employee e " +
+                "JOIN department d ON e.department_id = d.department_id " +
+                "WHERE employee_id = ?";
+
+        return db.update(updateSql)
+                        .parameters("Gray", 2)
+                        .count()
+                .compose(db.select(selectSql)
+                        .parameter(2)
+                        .dependsOnTransformer()
+                        .autoMap(Employee.class)
+                );
     }
 }
