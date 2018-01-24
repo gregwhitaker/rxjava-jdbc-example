@@ -4,7 +4,6 @@ import com.github.davidmoten.rx.jdbc.Database;
 import com.github.gregwhitaker.rxjavajdbc.example.model.Department;
 import com.github.gregwhitaker.rxjavajdbc.example.model.Employee;
 import rx.Observable;
-import rx.Subscriber;
 
 /**
  * Starts the rxjava-jdbc-example application.
