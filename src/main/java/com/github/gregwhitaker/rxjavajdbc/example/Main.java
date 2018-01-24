@@ -177,15 +177,7 @@ public class Main {
                         .getAs(Integer.class)
                 .compose(db.select(selectSql)       // Query new employee details based on auto-incremented id assigned
                         .parameterTransformer()
-                        .get(rs -> {
-                           Employee employee = new Employee();
-                           employee.setId(rs.getInt("employee_id"));
-                           employee.setFirstName(rs.getString("employee_firstname"));
-                           employee.setLastName(rs.getString("employee_lastname"));
-                           employee.setDepartment(rs.getString("department_name"));
-
-                           return employee;
-                        })
+                        .autoMap(Employee.class)
                 );
     }
 }
