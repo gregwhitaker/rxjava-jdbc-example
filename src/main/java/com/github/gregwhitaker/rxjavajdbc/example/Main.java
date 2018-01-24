@@ -78,6 +78,12 @@ public class Main {
                 });
     }
 
+    /**
+     * Executes a query that returns no results.
+     *
+     * @param db database connection
+     * @return an observable that emits no results
+     */
     private static Observable<Employee> getNoEmployees(Database db) {
         String sql = "SELECT * FROM employee e JOIN department d ON e.department_id = d.department_id WHERE employee_firstname LIKE 'Barbara'";
 
@@ -93,6 +99,12 @@ public class Main {
                 });
     }
 
+    /**
+     * Executes a query that returns all employees in the database.
+     *
+     * @param db database connection
+     * @return an observable that emits all employees
+     */
     private static Observable<Employee> getAllEmployees(Database db) {
         String sql = "SELECT * FROM employee e JOIN department d ON e.department_id = d.department_id";
 
@@ -108,6 +120,12 @@ public class Main {
                 });
     }
 
+    /**
+     * Executes a query that returns all employees in the manufacturing department.
+     *
+     * @param db database connection
+     * @return an observable that emits all employees in the manufacturing department
+     */
     private static Observable<Employee> getAllManufacturingEmployees(Database db) {
         String sql = "SELECT employee_id, employee_firstname, employee_lastname, department_name FROM employee e " +
             "JOIN department d ON e.department_id = d.department_id " +
@@ -126,6 +144,12 @@ public class Main {
                 });
     }
 
+    /**
+     * Executes a query that returns the employee information for 'Bob Smith'.
+     *
+     * @param db database connection
+     * @return an observable that emits a single employee, 'Bob Smith'
+     */
     private static Observable<Employee> getBobSmith(Database db) {
         String sql = "SELECT employee_id, employee_firstname, employee_lastname, department_name FROM employee e " +
                 "JOIN department d ON e.department_id = d.department_id " +
@@ -146,6 +170,12 @@ public class Main {
                 });
     }
 
+    /**
+     * Executes a query that returns the employee information for 'Bob Smith'.
+     *
+     * @param db database connection
+     * @return an observable that emits a single employee, 'Bob Smith'
+     */
     private static Observable<Employee> getBobSmithWithMapping(Database db) {
         String sql = "SELECT employee_id, employee_firstname, employee_lastname, department_name FROM employee e " +
                 "JOIN department d ON e.department_id = d.department_id " +
@@ -158,6 +188,12 @@ public class Main {
                 .autoMap(Employee.class);
     }
 
+    /**
+     * Executes a query that returns all departments in the database.
+     *
+     * @param db database connection
+     * @return an observable that emits all departments
+     */
     private static Observable<Department> getAllDepartmentsWithInterfaceMapping(Database db) {
         String sql = "SELECT * FROM department";
 
@@ -165,11 +201,24 @@ public class Main {
                 .autoMap(Department.class);
     }
 
+    /**
+     * Executes a query that returns all departments in the database.
+     *
+     * @param db database connection
+     * @return an observable that emits all departments
+     */
     private static Observable<Department> getAllDepartmentsUsingAnnotatedQuery(Database db) {
         return db.select()
                 .autoMap(Department.class);
     }
-    
+
+    /**
+     * Executes an insert statement that creates a new employee in the database and then composes
+     * a select statement to return the new employees information.
+     *
+     * @param db database connection
+     * @return an observable that emits the newly created employee
+     */
     private static Observable<Employee> createNewEmployee(Database db) {
         String createSql = "INSERT INTO employee (employee_firstname, employee_lastname, department_id) VALUES (?, ?, ?)";
         String selectSql = "SELECT employee_id, employee_firstname, employee_lastname, department_name FROM employee e " +
@@ -188,6 +237,12 @@ public class Main {
                 );
     }
 
+    /**
+     * Executes a delete statement to remove employee 'Jerry Cook' from the database.
+     *
+     * @param db database connection
+     * @return an observable that emits the number of rows removed from the database
+     */
     private static Observable<Integer> deleteEmployee(Database db) {
         String sql = "DELETE FROM employee WHERE employee_firstname = ? AND employee_lastname = ?";
 
