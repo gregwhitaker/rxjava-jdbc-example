@@ -22,7 +22,6 @@ repositories {
 dependencies {
     compile 'com.github.davidmoten:rxjava-jdbc:0.7.13'
     compile 'com.h2database:h2:1.4.196'
-    compile 'org.slf4j:slf4j-simple:1.7.22'
 }
 
 mainClassName = 'com.github.gregwhitaker.rxjavajdbc.example.Main'

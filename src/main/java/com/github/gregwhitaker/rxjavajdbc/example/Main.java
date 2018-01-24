@@ -3,60 +3,65 @@ package com.github.gregwhitaker.rxjavajdbc.example;
 import com.github.davidmoten.rx.jdbc.Database;
 import com.github.gregwhitaker.rxjavajdbc.example.model.Department;
 import com.github.gregwhitaker.rxjavajdbc.example.model.Employee;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import rx.Observable;
 
 /**
  * Starts the rxjava-jdbc-example application.
  */
 public class Main {
-    private static final Logger LOGGER = LoggerFactory.getLogger(Main.class);
 
     public static void main(String... args) throws Exception {
         Database db = Database.from("jdbc:h2:./build/mydatabase", "sa", "sa");
 
         // Query that returns no employees
         System.out.println();
-        LOGGER.info("Example: getNoEmployees");
-        getNoEmployees(db).subscribe(System.out::println);
+        System.out.println("Example: getNoEmployees");
+        getNoEmployees(db)
+                .subscribe(System.out::println);
 
         // Query that returns all employees
         System.out.println();
-        LOGGER.info("Example: getAllEmployees");
-        getAllEmployees(db).subscribe(System.out::println);
+        System.out.println("Example: getAllEmployees");
+        getAllEmployees(db)
+                .subscribe(System.out::println);
 
         // Query that returns all manufacturing employees
         System.out.println();
-        LOGGER.info("Example: getAllManufacturingEmployees");
-        getAllManufacturingEmployees(db).subscribe(System.out::println);
+        System.out.println("Example: getAllManufacturingEmployees");
+        getAllManufacturingEmployees(db)
+                .subscribe(System.out::println);
 
         // Query that returns Bob Smith
         System.out.println();
-        LOGGER.info("Example: getBobSmith");
-        getBobSmith(db).subscribe(System.out::println);
+        System.out.println("Example: getBobSmith");
+        getBobSmith(db)
+                .subscribe(System.out::println);
 
         // Query that returns Bob Smith and uses automapping for the
         // returned Employee object
         System.out.println();
-        LOGGER.info("Example: getBobSmithWithMapping");
-        getBobSmithWithMapping(db).subscribe(System.out::println);
+        System.out.println("Example: getBobSmithWithMapping");
+        getBobSmithWithMapping(db)
+                .subscribe(System.out::println);
 
         // Query that returns all departments and uses automapping on an interface
         // for the returned Department object
         System.out.println();
-        LOGGER.info("Example: getAllDepartmentsWithInterfaceMapping");
-        getAllDepartmentsWithInterfaceMapping(db).subscribe(department -> {
-            System.out.println(String.format("Department: %s - %s", department.id(), department.name()));
-        });
+        System.out.println("Example: getAllDepartmentsWithInterfaceMapping");
+        getAllDepartmentsWithInterfaceMapping(db)
+                .subscribe(department -> {
+                    System.out.println(String.format("Department: %s - %s", department.id(), department.name()));
+                });
 
         // Query that returns all departments and uses automapping with an annotated
         // query on the returned Department object
         System.out.println();
-        LOGGER.info("Example: getAllDepartmentsUsingAnnotatedQuery");
-        getAllDepartmentsUsingAnnotatedQuery(db).subscribe(department -> {
-            System.out.println(String.format("Department: %s - %s", department.id(), department.name()));
-        });
+        System.out.println("Example: getAllDepartmentsUsingAnnotatedQuery");
+        getAllDepartmentsUsingAnnotatedQuery(db)
+                .toBlocking()
+                .subscribe(department -> {
+                    System.out.println(String.format("Department: %s - %s", department.id(), department.name()));
+                });
     }
 
     private static Observable<Employee> getNoEmployees(Database db) {
