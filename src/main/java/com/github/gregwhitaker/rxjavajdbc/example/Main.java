@@ -169,13 +169,13 @@ public class Main {
                 "JOIN department d ON e.department_id = d.department_id " +
                 "WHERE employee_id = ?";
 
-        return db.update(createSql)
+        return db.update(createSql)                 // Create new employee
                         .parameter("Jerry")
                         .parameter("Cook")
                         .parameter(2)
                         .returnGeneratedKeys()
                         .getAs(Integer.class)
-                .compose(db.select(selectSql)
+                .compose(db.select(selectSql)       // Query new employee details based on auto-incremented id assigned
                         .parameterTransformer()
                         .get(rs -> {
                            Employee employee = new Employee();
