@@ -83,6 +83,12 @@ public class Main {
         System.out.println("Example: updateEmployee");
         updateEmployee(db)
                 .subscribe(System.out::println);
+
+        // Updates all manufacturing employees to marketing employees in a transaction
+        System.out.println();
+        System.out.println("Example: updateEmployeesInTransaction");
+        updateEmployeesInTransaction(db)
+                .subscribe(System.out::println);
     }
 
     /**
@@ -280,5 +286,31 @@ public class Main {
                         .dependsOnTransformer()
                         .autoMap(Employee.class)
                 );
+    }
+
+    /**
+     * Executes an update statement in a transaction to update all manufacturing employees to marketing employees
+     * and then returns all employee records in the database.
+     *
+     * @param db database connection
+     * @return an observable that emits all employees in the database
+     */
+    private static Observable<Employee> updateEmployeesInTransaction(Database db) {
+        String updateSql = "UPDATE employee SET department_id = ? WHERE department_id = ?";
+        String selectSql = "SELECT employee_id, employee_firstname, employee_lastname, department_name FROM employee e JOIN department d ON e.department_id = d.department_id";
+
+        Observable<Boolean> begin = db.beginTransaction();
+
+        // Updates all of the manufacturing employees to Marketing employees
+        Observable<Integer> updates = db.update(updateSql)
+                .dependsOn(begin)
+                .parameters(2, 4)
+                .count();
+
+        Observable<Boolean> commit = db.commit(updates);
+
+        return db.select(selectSql)
+                .dependsOn(commit)
+                .autoMap(Employee.class);
     }
 }
